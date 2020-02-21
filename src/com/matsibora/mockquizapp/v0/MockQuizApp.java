@@ -12,8 +12,9 @@ public class MockQuizApp extends JFrame {
     private JLabel questionLabel;
     private JRadioButton radioButtons[] = new JRadioButton[4];
     private JButton nextButton = new JButton("Next");
-    private baseQuestAnswer base = new baseQuestAnswer();
+    private BaseQuestAnswer base = new BaseQuestAnswer();
     private int numberQuest = 0;
+    private int result = 0;
 
     MockQuizApp() {
         super("Mock Quize Application");
@@ -40,38 +41,50 @@ public class MockQuizApp extends JFrame {
     }
 
     public static void main(String[] args) {
-        MockQuizApp newQuize = new MockQuizApp();
-        newQuize.setVisible(true);
+        MockQuizApp newQuiz = new MockQuizApp();
+        newQuiz.setVisible(true);
 
     }
+    
+    private boolean checkAnswer() {
+        for (int i = 0; i < radioButtons.length; i++) {
+            if (radioButtons[i].isSelected()) {
+                if (radioButtons[i].getText().equals(base.dataQA.get(numberQuest).get(5))) {
+                    result++;
+                    break;
+                }
+            }
+        }
+        return false;
+    }
 
-    //
+    // Actions for button Next, set new text to radiobutton, show message when finished quize
     private class ButtonNext implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (numberQuest < 10) {
+            if (numberQuest < 9) {
+                checkAnswer();
                 numberQuest++;
+                questionLabel.setText(base.dataQA.get(numberQuest).get(0));
+                for (int i = 0; i < radioButtons.length; i++) {
+                    radioButtons[i].setText(base.dataQA.get(numberQuest).get(i + 1));
+                }
+
             } else {
                 String message = "";
-                message += "You finished quize";
+                message += "You finished quize. \nYour result eqvels " + result + ".";
                 JOptionPane.showMessageDialog(null, message, "Info", JOptionPane.PLAIN_MESSAGE);
-                return;
-            }
-
-            questionLabel.setText(base.dataQA.get(numberQuest).get(0));
-            for (int i = 0; i < radioButtons.length; i++) {
-                radioButtons[i].setText(base.dataQA.get(numberQuest).get(i + 1));
             }
         }
     }
 
     // DataBase questions and answers
-    private class baseQuestAnswer {
-        private ArrayList<ArrayList<String>> dataQA = new ArrayList<ArrayList<String>>();
+    private class BaseQuestAnswer {
+        private ArrayList<ArrayList<String>> dataQA = new ArrayList<>();
 
-        public baseQuestAnswer() {
+        public BaseQuestAnswer() {
             for (int i = 0; i < 10; i++) {
-                dataQA.add(new ArrayList<String>());
+                dataQA.add(new ArrayList<>());
             }
 
             dataQA.get(0).add("Que1 : Which one among these is not a datatype");
