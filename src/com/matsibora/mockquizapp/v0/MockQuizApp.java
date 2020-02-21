@@ -46,7 +46,7 @@ public class MockQuizApp extends JFrame {
 
     }
     
-    private boolean checkAnswer() {
+    private void checkAnswer() {
         for (int i = 0; i < radioButtons.length; i++) {
             if (radioButtons[i].isSelected()) {
                 if (radioButtons[i].getText().equals(base.dataQA.get(numberQuest).get(5))) {
@@ -55,7 +55,6 @@ public class MockQuizApp extends JFrame {
                 }
             }
         }
-        return false;
     }
 
     // Actions for button Next, set new text to radiobutton, show message when finished quize
