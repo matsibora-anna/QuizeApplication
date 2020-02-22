@@ -12,6 +12,7 @@ public class MockQuizApp extends JFrame {
     private JLabel questionLabel;
     private JRadioButton radioButtons[] = new JRadioButton[4];
     private JButton nextButton = new JButton("Next");
+    private JButton resultButton = new JButton("Result");
     private BaseQuestAnswer base = new BaseQuestAnswer();
     private int numberQuest = 0;
     private int result = 0;
@@ -36,6 +37,10 @@ public class MockQuizApp extends JFrame {
             group.add(radioButtons[i]);
         }
 
+        container.add(resultButton);
+        resultButton.setEnabled(false);
+        resultButton.addActionListener(new ButtonResult());
+
         container.add(nextButton);
         nextButton.addActionListener(new ButtonNext());
     }
@@ -45,7 +50,7 @@ public class MockQuizApp extends JFrame {
         newQuiz.setVisible(true);
 
     }
-    
+
     private void checkAnswer() {
         for (int i = 0; i < radioButtons.length; i++) {
             if (radioButtons[i].isSelected()) {
@@ -57,7 +62,17 @@ public class MockQuizApp extends JFrame {
         }
     }
 
-    // Actions for button Next, set new text to radiobutton, show message when finished quize
+    // Actions for button Result, show message when finished quize
+    private class ButtonResult implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String message = "";
+            message += "You finished quize. \nYour result equals " + result + ".";
+            JOptionPane.showMessageDialog(null, message, "Result info", JOptionPane.PLAIN_MESSAGE);
+        }
+    }
+
+    // Actions for button Next, set new text to radiobutton
     private class ButtonNext implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -68,11 +83,9 @@ public class MockQuizApp extends JFrame {
                 for (int i = 0; i < radioButtons.length; i++) {
                     radioButtons[i].setText(base.dataQA.get(numberQuest).get(i + 1));
                 }
-
             } else {
-                String message = "";
-                message += "You finished quize. \nYour result eqvels " + result + ".";
-                JOptionPane.showMessageDialog(null, message, "Info", JOptionPane.PLAIN_MESSAGE);
+                nextButton.setEnabled(false);
+                resultButton.setEnabled(true);
             }
         }
     }
